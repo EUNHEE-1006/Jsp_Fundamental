@@ -1,0 +1,43 @@
+<!--ajax_proxy.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Get</title>
+    <script type="text/javascript" src="../js/jquery-3.5.1.js"></script>
+    <script>
+        $(function(){
+            $('#btn').click(function(){
+                $.ajax({
+                    url : 'proxy.jsp?url=http://openapi.seoul.go.kr:8088/7a6b495153706d6934356848616b61/xml/MgisWifi/1/5/', 
+                    type : 'GET',
+                    dataType : 'xml',
+                    error : function(){
+                        alert('error');
+                    },
+                    success : function(obj){      
+                        $('#sel').append(JSON.stringify(obj));  
+                    }
+                });
+                /*xhr.onreadystatechange = function(){
+                    if(xhr.readyState == 4 && xhr.status ==200){
+                        console.log(xhr.responseText);
+
+                        //문자열을 javascript 객체로 변환
+                        
+                    }
+                };*/
+            });
+
+        })
+    </script>
+</head>
+<body>
+    <button id ="btn">가져오기</button>
+    <div id ="sel">
+
+    </div>
+    
+</body>
+</html>
