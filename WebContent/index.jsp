@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	헬로우 제이에스피...
+	헬로우 제이에스피... not git
 	<%
 		for(int i = 0 ; i<100; i++){
 			out.println("hello<br>");
