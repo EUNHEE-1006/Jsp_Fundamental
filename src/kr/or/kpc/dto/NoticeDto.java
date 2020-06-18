@@ -6,10 +6,13 @@ public class NoticeDto {
 	private String title;
 	private String content;
 	private String regdate;
+
+	//alt+shift+s=> c
 	public NoticeDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	//alt+shift+s=> o
 	public NoticeDto(int num, String writer, String title, String content, String regdate) {
 		super();
 		this.num = num;
@@ -18,6 +21,7 @@ public class NoticeDto {
 		this.content = content;
 		this.regdate = regdate;
 	}
+	//alt+shift+s=> r
 	public int getNum() {
 		return num;
 	}
@@ -50,5 +54,4 @@ public class NoticeDto {
 	}
 	
 	
-
 }

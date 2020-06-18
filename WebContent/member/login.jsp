@@ -1,16 +1,16 @@
-<%@ page language="java" pageEncoding="UTF-8"%>
-<%@ include file = "../inc/header.jsp"%>
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb justify-content-end">
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item"><a href="#">Library</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Data</li>
-  </ol>
-</nav>
-  	
-    <div class ="container">
-    	<div class = "row">
-    			<div class="col-md-12">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="../inc/header.jsp"%>
+	<nav aria-label="breadcrumb ">
+	  <ol class="breadcrumb justify-content-end">
+	    <li class="breadcrumb-item "><a href="#">홈</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">로그인</li>
+	  </ol>
+	</nav>
+	
+    <div class="container">
+    	<div class="row">
+	        <div class="col-md-12">
 	        	<h5 class="card-title">로그인</h5>
 	            <form name="f" method="post" action="checkLogin.jsp">
 	              <div class="form-group">
@@ -36,10 +36,10 @@
 	              </div>
 	              
 	            </form>
-    		</div>
-    	</div>
+	        </div>
+        </div>
     </div>
-    <script>
+	<script>
 		$(function(){
 			const email = $("#email");
 			const pwd = $("#pwd");
@@ -60,6 +60,7 @@
 				}
 				if(!pwd.val()){
 					pwd.addClass("is-invalid");
+					$("#errorPwd").text('비밀번호를 입력하세요.');
 					pwd.focus();
 					return;
 				}
@@ -111,4 +112,4 @@
 			}
 		});
 	</script>
-<%@ include file = "../inc/footer.jsp"%>
+<%@ include file="../inc/footer.jsp"%>

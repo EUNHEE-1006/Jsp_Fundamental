@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%
-	request.setCharacterEncoding("utf-8");
-	String keyword = request.getParameter("keyword");
+   request.setCharacterEncoding("utf-8");
+   String keyword = request.getParameter("keyword");
 %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>키워드로 장소검색하고 목록으로 표출하기</title>
+    <title>와이파이 지도</title>
     <style>
 .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
 .map_wrap {position:relative;width:100%;height:500px;}
-#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:300px;height:margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
 #menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
 #menu_wrap .option{text-align: center;}
@@ -50,12 +50,12 @@
 </head>
 <body>
 <div class="map_wrap">
-    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+    <div id="map" style="width:100%; height:200%;position:relative;overflow:hidden;"></div>
 
     <div id="menu_wrap" class="bg_white">
         <div class="option">
             <div>
-                    키워드 : <input type="text" id="keyword" value="<%=keyword %>" size="15"> 
+                    키워드 : <input type="text" id="keyword" size="15"> 
                     <button type="submit" id ="btn">검색하기</button> 
             </div>
         </div>
@@ -73,69 +73,54 @@
              mapOption = {
                  center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
                  level: 3 // 지도의 확대 레벨
-             };  
-         
+             };          
          // 지도를 생성합니다    
          var map = new kakao.maps.Map(mapContainer, mapOption);         
          // 장소 검색 객체를 생성합니다
          var ps = new kakao.maps.services.Places();  
          // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
          var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-            
-         $('#btn').trigger("click");
-         function loadData(){
-        	 $.ajax({
-                 url : 'seoulwifiTest.json', 
+          
+        $('#btn').click(function(){
+            loadData();
+        });
+        function executeAjax(){
+           
+        }
+         function loadData(){   
+            $.ajax({
+                 url : 'seoulwifi.json', 
                  type : 'GET',
                  dataType : 'json',
                  error : function(){
-                     alert('error');
+                     alert('검색된 결과가 없습니다.!!');
                  },
                  success : function(obj){
                     const listArray = obj.DATA;   
-                        var keyword = $("#keyword").val()//document.getElementById('keyword').value;
+                        var keyword = $("#keyword").val();
                         if(keyword){
                            var list = new Array();
                            var index =0;    
                            for(var i=0; i<listArray.length; i++){
                                const listObj = listArray[i];
                                var placename =listObj.place_name;
-                               console.log(placename);  
                                if(placename.indexOf(keyword)!=-1){
                                   list[index++] = listObj; 
                                }   
                            }
                         if(list[0]){
-	                      displayPlaces(list);
-	                      displayPagination(pagination);
+                         displayPlaces(list);
+                         displayPagination(pagination);
                         }else{
                            alert('검색된 결과가 없습니다.!!');
-                           var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	                        mapOption = {
-	                            center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-	                            level: 3 // 지도의 확대 레벨
-	                        };  
-                       var map = new kakao.maps.Map(mapContainer, mapOption); 
-                       var ps = new kakao.maps.services.Places();  
-                       var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-                                 return;
-                           };
+                           
+                           }
                        }else{
                               alert('키워드를 입력해주세요!!');
-                              var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	                          mapOption = {
-	                             center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-	                             level: 3 // 지도의 확대 레벨
-	                          };  
-                        var map = new kakao.maps.Map(mapContainer, mapOption); 
-                        var ps = new kakao.maps.services.Places();  
-                        var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-                                    return;
-                       	};
+                           }
                     }
              });
          }
-         loadData();
          // 검색 결과 목록과 마커를 표출하는 함수입니다
          function displayPlaces(places) {         
              var listEl = document.getElementById('placesList'), 
@@ -155,7 +140,7 @@
                      itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
                  // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
                  // LatLngBounds 객체에 좌표를 추가합니다
-                 	 bounds.extend(placePosition);
+                     bounds.extend(placePosition);
                  // 마커와 검색결과 항목에 mouseover 했을때
                  // 해당 장소에 인포윈도우에 장소명을 표시합니다
                  // mouseout 했을 때는 인포윈도우를 닫습니다
@@ -232,8 +217,7 @@
              // 기존에 추가된 페이지번호를 삭제합니다
              while (paginationEl.hasChildNodes()) {
                  paginationEl.removeChild (paginationEl.lastChild);
-             }
-         
+             }        
              for (i=1; i<=pagination.last; i++) {
                  var el = document.createElement('a');
                  el.href = "#";

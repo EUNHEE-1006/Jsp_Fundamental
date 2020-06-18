@@ -47,6 +47,135 @@ public class CustomerDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null)
+					rs.close();
+				if (pstm != null)
+					pstm.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return dto;
 	}
+	public int insert(CustomerDto dto) {
+		int resultCount = 0;
+
+		Connection con = null;
+		PreparedStatement pstm = null;
+
+		try {
+			con = ConnLocator.getConnect();
+			StringBuffer sql = new StringBuffer();
+			sql.append("INSERT INTO customer(c_email, c_pwd, c_name) ");
+			sql.append("VALUES(?,PASSWORD(?), ?) ");
+			
+			pstm = con.prepareStatement(sql.toString());
+			
+			int index = 0;
+			pstm.setString(++index, dto.getEmail());
+			pstm.setString(++index, dto.getPwd());
+			pstm.setString(++index, dto.getName());
+
+			
+			resultCount = pstm.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstm != null)
+					pstm.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return resultCount;
+	}
+	
+	public int update(CustomerDto dto) {
+		int resultCount = 0;
+
+		Connection con = null;
+		PreparedStatement pstm = null;
+
+		try {
+			con = ConnLocator.getConnect();
+			StringBuffer sql = new StringBuffer();
+			sql.append("UPDATE customer ");
+			sql.append("SET c_pwd = PASSWORD(?), c_name =? ");
+			sql.append("WHERE c_email = ? ");
+
+			pstm = con.prepareStatement(sql.toString());
+
+			int index = 0;
+			pstm.setString(++index, dto.getPwd());
+			pstm.setString(++index, dto.getName());
+			pstm.setString(++index, dto.getEmail());
+
+			resultCount = pstm.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstm != null)
+					pstm.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		return resultCount;
+	}
+	public boolean isExisted(String email) {
+		boolean success = false;
+
+		Connection con = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+
+		try {
+			con = ConnLocator.getConnect();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT c_email ");
+			sql.append("FROM customer ");
+			sql.append("WHERE c_email = ? ");
+
+			pstm = con.prepareStatement(sql.toString());
+			
+			int index = 0;
+			pstm.setString(++index, email);
+			rs = pstm.executeQuery();
+
+			if (rs.next()) {
+				success =true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null)
+					rs.close();
+				if (pstm != null)
+					pstm.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return success;
+	}
+}
